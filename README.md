@@ -31,7 +31,3 @@ npm start
 - React
 - Context API
 - CSS
-
-## Licencia
-
-Este proyecto está bajo la licencia MIT.
