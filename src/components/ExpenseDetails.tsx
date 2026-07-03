@@ -1,43 +1,53 @@
-import { useMemo } from "react"
-import { formatDate } from "../helpers"
-import type { Expense } from "../types"
-import AmountDisplay from "./AmountDisplay"
-import { categories } from "../data/categories"
+import { useMemo } from "react";
+import { formatDate } from "../helpers";
+import type { Expense } from "../types";
+import AmountDisplay from "./AmountDisplay";
+import { categories } from "../data/categories";
 import {
-  LeadingActions,
-  SwipeableList,
-  SwipeableListItem,
-  SwipeAction,
-  TrailingActions,
-} from 'react-swipeable-list';
-import 'react-swipeable-list/dist/styles.css';
+    LeadingActions,
+    SwipeableList,
+    SwipeableListItem,
+    SwipeAction,
+    TrailingActions,
+} from "react-swipeable-list";
+import "react-swipeable-list/dist/styles.css";
 import { useBudget } from "../hooks/useBudget";
 
 type ExpenseDetailsProps = {
-    expense: Expense
-}
+    expense: Expense;
+};
 
 export default function ExpenseDetails({ expense }: ExpenseDetailsProps) {
-
-    const categoryInfo = useMemo(() => categories.filter(cat => cat.name === expense.category)[0], [expense])
+    const categoryInfo = useMemo(
+        () => categories.filter((cat) => cat.name === expense.category)[0],
+        [expense]
+    );
+    const { dispatch } = useBudget();
 
     const leadingActions = () => (
         <LeadingActions>
-            <SwipeAction onClick={() => dispatch({ type: 'get-expense-by-id', payload: { id: expense.id } })}>
+            <SwipeAction
+                onClick={() =>
+                    dispatch({ type: "get-expense-by-id", payload: { id: expense.id } })
+                }
+            >
                 Actualizar
             </SwipeAction>
         </LeadingActions>
-    )
+    );
 
     const trailingActions = () => (
         <TrailingActions>
-            <SwipeAction onClick={() => dispatch({type: 'delete-expense', payload: {id: expense.id}})}
-                destructive={true}>
-                Eliminar 
+            <SwipeAction
+                onClick={() =>
+                    dispatch({ type: "delete-expense", payload: { id: expense.id } })
+                }
+                destructive={true}
+            >
+                Eliminar
             </SwipeAction>
         </TrailingActions>
-    )
-    const { dispatch } = useBudget();
+    );
 
     return (
         <SwipeableList>
@@ -46,26 +56,26 @@ export default function ExpenseDetails({ expense }: ExpenseDetailsProps) {
                 leadingActions={leadingActions()}
                 trailingActions={trailingActions()}
             >
-                <div className="bg-white shadow-lg p-10 w-full border-b border-gray-200 flex gap-5 items-center">
-                    <div>
+                <div className="bg-surface border-b border-app p-5 w-full flex gap-4 items-center transition-colors hover:bg-elevated">
+                    <div className="shrink-0">
                         <img
                             src={`/icono_${categoryInfo?.icon}.svg`}
                             alt="Icono Gasto"
-                            className="w-20"
+                            className="w-14"
                         />
                     </div>
-                    <div className="flex-1">
-                        <p className="text-sm font-bold uppercase text-slate-500">{categoryInfo?.name}</p>
-                        <p className="font-bold text-xl">{expense.expenseName}</p>
-                        <p className="text-slate-600 text-sm">
+                    <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold uppercase text-muted tracking-widest">
+                            {categoryInfo?.name}
+                        </p>
+                        <p className="font-bold text-body truncate">{expense.expenseName}</p>
+                        <p className="text-muted text-sm">
                             {expense.date instanceof Date ? formatDate(expense.date) : ""}
                         </p>
                     </div>
-                    <AmountDisplay
-                        amount={expense.amount}
-                    />
+                    <AmountDisplay amount={expense.amount} />
                 </div>
             </SwipeableListItem>
         </SwipeableList>
-    )
+    );
 }

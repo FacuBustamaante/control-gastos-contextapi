@@ -1,18 +1,170 @@
 @import "tailwindcss";
 
-/*** SWIPE LIST OVERRIDES **/
-.swipeable-list-item__leading-actions, 
-.swipeable-list-item__trailing-actions {
-  @apply text-white text-lg uppercase font-bold;
+/* ----------------------------------------------------------------
+   Design tokens — portfolio system
+----------------------------------------------------------------- */
+@theme {
+  --color-primary: #00684a;
+  --color-secondary: #00ed64;
+  --color-deep: #002e21;
+  --color-ink: #0a0a0a;
+
+  --font-display: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-glow: 0 0 40px -10px rgba(0, 237, 100, 0.45);
 }
-.swipeable-list-item__leading-actions{
-  @apply bg-blue-600;
+
+.font-display {
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 0, "WONK" 0;
+  letter-spacing: -0.02em;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ----------------------------------------------------------------
+   Semantic theme variables
+----------------------------------------------------------------- */
+@layer base {
+  :root {
+    --bg: #f4f5f4;
+    --bg-elevated: #ffffff;
+    --surface: #ffffff;
+    --border: #e4e6e4;
+    --text: #14171a;
+    --text-muted: #5b6770;
+    --grid: rgba(0, 0, 0, 0.04);
+  }
+
+  :root.dark {
+    --bg: #070808;
+    --bg-elevated: #0e1110;
+    --surface: #111413;
+    --border: #1e2422;
+    --text: #f1f5f3;
+    --text-muted: #8a948f;
+    --grid: rgba(255, 255, 255, 0.035);
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-secondary);
+    color: #00210f;
+  }
+
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+}
+
+/* ----------------------------------------------------------------
+   Utilities
+----------------------------------------------------------------- */
+@layer utilities {
+  .bg-surface    { background-color: var(--surface); }
+  .bg-base       { background-color: var(--bg); }
+  .bg-elevated   { background-color: var(--bg-elevated); }
+  .text-body     { color: var(--text); }
+  .text-muted    { color: var(--text-muted); }
+  .border-app    { border-color: var(--border); }
+
+  .text-gradient {
+    background: linear-gradient(120deg, var(--color-secondary), #6fffb0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grid-bg {
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .glass {
+    background-color: color-mix(in srgb, var(--bg-elevated) 70%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+}
+
+/* ----------------------------------------------------------------
+   Swipe list actions
+----------------------------------------------------------------- */
+.swipeable-list-item__leading-actions,
+.swipeable-list-item__trailing-actions {
+  color: white;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.swipeable-list-item__leading-actions {
+  background-color: var(--color-primary);
 }
 .swipeable-list-item__trailing-actions {
-  @apply bg-pink-600;
+  background-color: #dc2626;
 }
 .swipeable-list .swipe-action {
-  @apply flex justify-center items-center
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-
+/* ----------------------------------------------------------------
+   DatePicker / Calendar overrides for dark mode
+----------------------------------------------------------------- */
+.react-calendar {
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 0.75rem;
+}
+.react-calendar__tile {
+  color: var(--text) !important;
+}
+.react-calendar__tile:hover {
+  background-color: var(--bg-elevated) !important;
+}
+.react-calendar__tile--active,
+.react-calendar__tile--active:enabled:hover {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+}
+.react-calendar__navigation button {
+  color: var(--text) !important;
+}
+.react-calendar__navigation button:hover {
+  background-color: var(--bg-elevated) !important;
+}
+.react-date-picker__wrapper {
+  border-color: var(--border) !important;
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+}
+.react-date-picker__inputGroup__input {
+  color: var(--text) !important;
+}
+.react-date-picker__button svg {
+  stroke: var(--text-muted);
+}
